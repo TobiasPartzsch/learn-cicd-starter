@@ -21,7 +21,7 @@ func respondWithError(w http.ResponseWriter, code int, msg string, logErr error)
 	})
 }
 
-func respondWithJSON(w http.ResponseWriter, code int, payload any) {
+func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	dat, err := json.Marshal(payload)
 	if err != nil {
@@ -30,10 +30,5 @@ func respondWithJSON(w http.ResponseWriter, code int, payload any) {
 		return
 	}
 	w.WriteHeader(code)
-	_, err = w.Write(dat)
-	if err != nil {
-		log.Printf("Error writing to response header: %s", err)
-		w.WriteHeader(500)
-		return
-	}
+	w.Write(dat)
 }
